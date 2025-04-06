@@ -1,0 +1,179 @@
+---
+title: "Unstructured Data Final Project"
+format: html
+---
+Introduction
+The goal of my project was to scrape a popular reddit thread, known as wallstreetbets. This particular thread deals with the stock market, but in its own special way. Many of the individuals are known to take huge, risky bets and post their losses and gains on the site. There is also a lot of satirical content posted along with it which makes it even more entertaining. I wanted to scrape comments and stock tickers, and then perform a sentiment analysis on the comments that I scraped. 
+
+Methodology
+The first thing I did was figure out how to use PRAW, which is a package designed to scrape reddit. I had to go to a site known as “old reddit” in order to get a client id, client secret, and user agent in order to use PRAW. This is because reddit wants to be able to know who is scraping them and what they are doing on their site. From there, I defined the subreddit in particular that I was going to use, which in this case was wallstreetbets. Initially, I did not have my next step in place, but after running my code for the first time, I noticed that it was picking up “tickers” for stocks that weren’t tickers, like WHY or UGH. This prompted me to create a dictionary of valid ticker symbols. I opted for stocks in the S&P500, and added Gamestop in as well due to the notoriety of it in this particular reddit thread. Then, I specified specifically the hot section of the reddit page in order to both not grab the entirety of all comments ever on the particular thread and to capture recently trending things in particular. I then went on to process the comments by stipulating that if the comment has the ticker in the dictionary, to record the time and the  comment.
+
+Discussion
+Overall, the sentiment of the comments associated with a lot of the stock tickers appears to be mostly negative. I think this is really interesting, and maybe speaks to what happens if you bet money on stocks without doing a ton of research. People online also love to hate on things which also probably contributes to overall negative sentiment. To take this project further, I think you could overlay volatility, price movements, and a ton of other metrics along with the comments and sentiment analysis to see if there are any correlations. 
+
+
+I wanted to give another layer to the project, so I decided to make a streamlit app that you could use in conjunction with any stock tickers you find. This streamlit app allows you input any stock tickers of your desire, compare it to the QQQ as a benchmark, and give you a variety of ratios for insights. It also gives you an efficient frontier graph which is a good indicator of your risk versus return ratio! This wasn't necessarily full a part of the original project, but I thought it was 
+a cool addition and I will add the link to the streamlit app in the comments section of the submission if you want to take a look! 
+
+```{python}
+import praw
+import re
+from datetime import datetime
+import pandas as pd
+import nltk
+nltk.download('vader_lexicon')
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+reddit = praw.Reddit(
+    client_id='z2aGPcgZylW8A3KELoqcxQ',
+    client_secret='oqhbcDAC42U1FZNVEDOI1Y1eOL1KoQ',
+    user_agent='python:TickerScrapeWSB:version(by/u/Hefty_Risk3180)'
+)
+
+subreddit = reddit.subreddit('wallstreetbets')
+pattern = re.compile(r'\$?([A-Z]{2,5})')
+
+# Here is a list of ticker symbols that I have defined as valid
+valid_tickers = {"MMM", "ABT", "ABBV", "ACN", "ATVI", "ADBE", "AMD", "AAP", "AES", "AFL", "A", "APD", "AKAM", "ALK", "ALB", "ARE", "ALXN", "ALGN", "ALLE", "AGN","ADS", "LNT", "ALL", "GOOGL", "GOOG", "MO", "AMZN", "AMCR", "AEE", "AEP","AXP", "AIG", "AMT", "AWK", "AMP", "ABC", "AME", "AMGN", "APH", "APTV","ANSS", "ANTM", "AON", "AOS", "APA", "AIV", "AMAT", "ATO", "ADSK", "ADP","AZO", "AVB", "AVY", "BKR", "BLL", "BAC", "BK", "BAX", "BDX", "BRK.B","BBY", "BIIB", "BLK", "BA", "BKNG", "BWA", "BXP", "BSX", "BMY", "AVGO","BR", "BF.B", "CHRW", "COG", "CDNS", "CPB", "COF", "CAH", "KMX", "CCL","CAT", "CBOE", "CBRE", "CDW", "CE", "CNC", "CNP", "CTL", "CERN", "CF","SCHW", "CHTR", "CVX", "CMG", "CB", "CHD", "CI", "CINF", "CTAS", "CSCO","C", "CFG", "CTXS", "CLX", "CME", "CMS", "KO", "CTSH", "CL", "CMCSA", "CMA","CAG", "CXO", "COP", "ED", "STZ", "COO", "CPRT", "GLW", "CTVA", "COST","CCI", "CSX", "CMI", "CVS", "DHI", "DHR", "DRI", "DVA", "DE", "DAL", "XRAY","DVN", "DLR", "D", "DPZ", "DOV", "DOW", "DTE", "DUK", "DRE", "DD", "DXC","ETN", "EBAY", "ECL", "EIX", "EW", "EA", "EMN", "ETR", "EOG", "EQT", "EFX","EQR", "ESS", "EL", "ETSY", "EVRG", "EXC", "EXPD", "EXPE", "FIS", "FISV","FLT", "FMC", "F", "FTI", "FB", "FBHS", "BEN", "FCX", "FRT", "FTNT", "FTV","GD", "GE", "GPC", "GILD", "GIS", "GM", "GPN", "GS", "GWW", "HRB", "HAL","HBI", "HOG", "HIG", "HOLX", "HD", "HON", "HRL", "HST", "HWM", "HPQ", "HUM","HBAN", "HII", "IEX", "IDXX", "INFO", "ITW", "ILMN", "INCY", "IR", "INTC","ICE", "IBM", "IP", "IPG", "IFF", "INTU", "ISRG", "IVZ", "IRM", "JBHT", "JCI","JPM", "JNJ", "J", "KSU", "K", "KEY", "KMB", "KIM", "KMI", "KLAC", "KHC", "KR","LB", "LHX", "LH", "LRCX", "LW", "LVS", "LEG", "LDOS", "LEN", "LLY", "LNC", "LIN","LYV", "L", "LOW", "LUMN", "LYB", "MTB", "MRO", "MPC", "MKC", "MCD", "MCK", "MDT","MRK", "MET", "MTD", "MGM", "MCHP", "MU", "MSFT", "MA", "MHK", "TAP", "MDLZ","MON", "MNST", "MCO", "MS", "MOS", "MSI", "MYL", "NDAQ", "NTAP", "NFLX", "NWL","NEM", "NWSA", "NWS", "NEE", "NLSN", "NKE", "NI", "NSC", "NTRS", "NOC", "NOV",
+"NRG", "NUE", "NVDA", "NVR", "NXPI", "ORCL", "OXY", "ODFL", "OMC", "OKE", "ORLY","OTIS", "O", "PCAR", "PH", "PDCO", "PAYX", "PAYC", "PNR", "PBCT", "PEAK", "PKI","PRGO", "PFE", "PM", "PSX", "PNW", "PXD", "PNC", "POOL", "PPG", "PPL", "PFG", "PG","PGR", "PLD", "PRU", "PEG", "PSA", "PHM", "PVH", "QRVO", "PWR", "QCOM", "RL", "REG","REGN", "RF", "RSG", "RCL", "RMD", "RHI", "ROK", "ROP", "ROST", "RJF", "SPGI", "CRM","SBAC", "SLB", "STX", "SEE", "SRE", "NOW", "SHW", "SPG", "SWKS", "SNA", "STT",
+"SRCL", "SWK", "SBUX", "STE", "SYK", "SIVB", "SLG", "SYY", "TROW", "TTWO", "TPR","TGT", "TEL", "TMO", "TJX", "TSCO", "TDG", "TRV", "TRIP", "TIF", "TSLA", "TXN","TXT", "UDR", "ULTA", "UAL", "UNP", "UNH", "UPS", "USB", "VLO", "VAR", "VTR","VRSN", "VZ", "VRTX", "VIAC", "VFC", "WBA", "WMT", "WRK", "WU", "WY", "WHR","WDC", "WEC", "WFC", "WELL", "WST", "XEL", "XOM", "XRAY", "XLNX", "XYL", "YUM","ZBRA", "ZBH", "ZION", "ZTS","GME"} 
+
+# Dictionary to store ticker mentions with associated details
+mentions = {}
+
+# Process submissions: combine title and selftext
+for submission in subreddit.hot(limit=100):
+    combined_text = submission.title + " " + submission.selftext
+    matches = pattern.findall(combined_text)
+    for ticker in matches:
+        # Only record if the ticker is in our valid tickers list
+        if ticker in valid_tickers:
+            record = {
+                "date": datetime.utcfromtimestamp(submission.created_utc),
+                "text": combined_text,
+                "type": "submission"
+            }
+            mentions.setdefault(ticker, []).append(record)
+    
+    # Process comments
+    submission.comments.replace_more(limit=0)
+    for comment in submission.comments.list():
+        matches = pattern.findall(comment.body)
+        for ticker in matches:
+            if ticker in valid_tickers:
+                record = {
+                    "date": datetime.utcfromtimestamp(comment.created_utc),
+                    "text": comment.body,
+                    "type": "comment"
+                }
+                mentions.setdefault(ticker, []).append(record)
+
+# Convert the 'mentions' dictionary into a list of records for a DataFrame
+data = []
+for ticker, records in mentions.items():
+    for rec in records:
+        data.append({
+            'ticker': ticker,
+            'date': rec['date'],
+            'text': rec['text'],
+            'type': rec['type']
+        })
+df = pd.DataFrame(data)
+sid = SentimentIntensityAnalyzer()
+df['sentiment'] = df['text'].apply(lambda x: sid.polarity_scores(x)['compound'])
+
+# Here I am going to group by ticker to aggregate results
+grouped = df.groupby('ticker').agg(
+    Total_Mentions=('ticker', 'count'),
+    Avg_Sentiment=('sentiment', 'mean'),
+    Dates=('date', lambda x: list(x)),
+    Texts=('text', lambda x: list(x))
+).reset_index()
+# Rearranging columns with Total_Mentions! 
+grouped = grouped[['Total_Mentions', 'ticker', 'Avg_Sentiment', 'Dates', 'Texts']].sort_values("Total_Mentions", ascending=False)
+
+print("\nGrouped DataFrame with Sentiment:")
+print(grouped)
+```
+
+
+```{python}
+import pandas as pd
+# I was having trouble with the display of the text column, so I set a higher width on the columns
+pd.set_option('display.max_colwidth', None)
+
+nvda_comments = df[df['ticker'] == 'NVDA']
+print(nvda_comments[['date', 'text', 'sentiment']].head(30))
+```
+
+```{python}
+nvda_grouped_texts = grouped[grouped['ticker'] == 'NVDA']['Texts'].values
+if nvda_grouped_texts.size > 0:
+    for i, text in enumerate(nvda_grouped_texts[0][:30], start=1):
+        print(f"Comment {i}:")
+        print(text)
+        print("-" * 80)
+else:
+    print("Ticker NVDA not found in grouped data.")
+```
+```{python}
+NVDA_texts = grouped[grouped['ticker'] == 'NVDA']['Texts'].values
+if len(NVDA_texts) > 0:
+    texts = NVDA_texts[0]  # list of texts for NVDA
+    # Print only the first 15 comments (if available)
+    for text in texts[:30]:
+        print(text)
+        print("-" * 80)
+else:
+    print("Ticker NVDA not found in the grouped data.")
+```
+
+
+```{python}
+import pandas as pd
+
+# Set max column width to None to avoid truncation
+pd.set_option('display.max_colwidth', None)
+
+MSFT_comments = df[df['ticker'] == 'MSFT']
+print(MSFT_comments[['date', 'text', 'sentiment']].head(30))
+```
+
+```{python}
+MSFT_grouped_texts = grouped[grouped['ticker'] == 'MSFT']['Texts'].values
+if MSFT_grouped_texts.size > 0:
+    for i, text in enumerate(MSFT_grouped_texts[0][:30], start=1):
+        print(f"Comment {i}:")
+        print(text)
+        print("-" * 80)
+else:
+    print("Ticker GME not found in grouped data.")
+```
+
+```{python}
+highest_sentiment_ticker = grouped.loc[grouped['Avg_Sentiment'].idxmax(), 'ticker']
+print("Ticker with highest sentiment:", highest_sentiment_ticker)
+```
+
+```{python}
+import matplotlib.pyplot as plt
+import pandas as pd
+
+msft_df = df[df['ticker'] == 'MSFT'].copy()
+
+# Createing a new column here to store only the date part 
+msft_df['date_only'] = msft_df['date'].dt.date
+
+# Group by the date_only column and count the mentions for each day
+mentions_by_date = msft_df.groupby('date_only').size().reset_index(name='mentions')
+
+# Plot the frequency of mentions over time
+plt.figure(figsize=(12, 6))
+plt.plot(mentions_by_date['date_only'], mentions_by_date['mentions'], marker='o', linestyle='-', color='blue')
+plt.title('MSFT Mentions Over Time on r/wallstreetbets')
+plt.xlabel('Date')
+plt.ylabel('Number of Mentions')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```

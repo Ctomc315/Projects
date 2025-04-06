@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Unstructured Data Final Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="UnstructuredFinalProject_files/libs/clipboard/clipboard.min.js"></script>
+<script src="UnstructuredFinalProject_files/libs/quarto-html/quarto.js"></script>
+<script src="UnstructuredFinalProject_files/libs/quarto-html/popper.min.js"></script>
+<script src="UnstructuredFinalProject_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="UnstructuredFinalProject_files/libs/quarto-html/anchor.min.js"></script>
+<link href="UnstructuredFinalProject_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="UnstructuredFinalProject_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="UnstructuredFinalProject_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="UnstructuredFinalProject_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="UnstructuredFinalProject_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Unstructured Data Final Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Introduction The goal of my project was to scrape a popular reddit thread, known as wallstreetbets. This particular thread deals with the stock market, but in its own special way. Many of the individuals are known to take huge, risky bets and post their losses and gains on the site. There is also a lot of satirical content posted along with it which makes it even more entertaining. I wanted to scrape comments and stock tickers, and then perform a sentiment analysis on the comments that I scraped.</p>
+<p>Methodology The first thing I did was figure out how to use PRAW, which is a package designed to scrape reddit. I had to go to a site known as “old reddit” in order to get a client id, client secret, and user agent in order to use PRAW. This is because reddit wants to be able to know who is scraping them and what they are doing on their site. From there, I defined the subreddit in particular that I was going to use, which in this case was wallstreetbets. Initially, I did not have my next step in place, but after running my code for the first time, I noticed that it was picking up “tickers” for stocks that weren’t tickers, like WHY or UGH. This prompted me to create a dictionary of valid ticker symbols. I opted for stocks in the S&amp;P500, and added Gamestop in as well due to the notoriety of it in this particular reddit thread. Then, I specified specifically the hot section of the reddit page in order to both not grab the entirety of all comments ever on the particular thread and to capture recently trending things in particular. I then went on to process the comments by stipulating that if the comment has the ticker in the dictionary, to record the time and the comment.</p>
+<p>Discussion Overall, the sentiment of the comments associated with a lot of the stock tickers appears to be mostly negative. I think this is really interesting, and maybe speaks to what happens if you bet money on stocks without doing a ton of research. People online also love to hate on things which also probably contributes to overall negative sentiment. To take this project further, I think you could overlay volatility, price movements, and a ton of other metrics along with the comments and sentiment analysis to see if there are any correlations.</p>
+<p>I wanted to give another layer to the project, so I decided to make a streamlit app that you could use in conjunction with any stock tickers you find. This streamlit app allows you input any stock tickers of your desire, compare it to the QQQ as a benchmark, and give you a variety of ratios for insights. It also gives you an efficient frontier graph which is a good indicator of your risk versus return ratio! This wasn’t necessarily full a part of the original project, but I thought it was a cool addition and I will add the link to the streamlit app in the comments section of the submission if you want to take a look!</p>
+<div id="1287a2c5" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> praw</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">'vader_lexicon'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment.vader <span class="im">import</span> SentimentIntensityAnalyzer</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>reddit <span class="op">=</span> praw.Reddit(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    client_id<span class="op">=</span><span class="st">'z2aGPcgZylW8A3KELoqcxQ'</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    client_secret<span class="op">=</span><span class="st">'oqhbcDAC42U1FZNVEDOI1Y1eOL1KoQ'</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    user_agent<span class="op">=</span><span class="st">'python:TickerScrapeWSB:version(by/u/Hefty_Risk3180)'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>subreddit <span class="op">=</span> reddit.subreddit(<span class="st">'wallstreetbets'</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r'\$?([A-Z]{2,5})'</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Here is a list of ticker symbols that I have defined as valid</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>valid_tickers <span class="op">=</span> {<span class="st">"MMM"</span>, <span class="st">"ABT"</span>, <span class="st">"ABBV"</span>, <span class="st">"ACN"</span>, <span class="st">"ATVI"</span>, <span class="st">"ADBE"</span>, <span class="st">"AMD"</span>, <span class="st">"AAP"</span>, <span class="st">"AES"</span>, <span class="st">"AFL"</span>, <span class="st">"A"</span>, <span class="st">"APD"</span>, <span class="st">"AKAM"</span>, <span class="st">"ALK"</span>, <span class="st">"ALB"</span>, <span class="st">"ARE"</span>, <span class="st">"ALXN"</span>, <span class="st">"ALGN"</span>, <span class="st">"ALLE"</span>, <span class="st">"AGN"</span>,<span class="st">"ADS"</span>, <span class="st">"LNT"</span>, <span class="st">"ALL"</span>, <span class="st">"GOOGL"</span>, <span class="st">"GOOG"</span>, <span class="st">"MO"</span>, <span class="st">"AMZN"</span>, <span class="st">"AMCR"</span>, <span class="st">"AEE"</span>, <span class="st">"AEP"</span>,<span class="st">"AXP"</span>, <span class="st">"AIG"</span>, <span class="st">"AMT"</span>, <span class="st">"AWK"</span>, <span class="st">"AMP"</span>, <span class="st">"ABC"</span>, <span class="st">"AME"</span>, <span class="st">"AMGN"</span>, <span class="st">"APH"</span>, <span class="st">"APTV"</span>,<span class="st">"ANSS"</span>, <span class="st">"ANTM"</span>, <span class="st">"AON"</span>, <span class="st">"AOS"</span>, <span class="st">"APA"</span>, <span class="st">"AIV"</span>, <span class="st">"AMAT"</span>, <span class="st">"ATO"</span>, <span class="st">"ADSK"</span>, <span class="st">"ADP"</span>,<span class="st">"AZO"</span>, <span class="st">"AVB"</span>, <span class="st">"AVY"</span>, <span class="st">"BKR"</span>, <span class="st">"BLL"</span>, <span class="st">"BAC"</span>, <span class="st">"BK"</span>, <span class="st">"BAX"</span>, <span class="st">"BDX"</span>, <span class="st">"BRK.B"</span>,<span class="st">"BBY"</span>, <span class="st">"BIIB"</span>, <span class="st">"BLK"</span>, <span class="st">"BA"</span>, <span class="st">"BKNG"</span>, <span class="st">"BWA"</span>, <span class="st">"BXP"</span>, <span class="st">"BSX"</span>, <span class="st">"BMY"</span>, <span class="st">"AVGO"</span>,<span class="st">"BR"</span>, <span class="st">"BF.B"</span>, <span class="st">"CHRW"</span>, <span class="st">"COG"</span>, <span class="st">"CDNS"</span>, <span class="st">"CPB"</span>, <span class="st">"COF"</span>, <span class="st">"CAH"</span>, <span class="st">"KMX"</span>, <span class="st">"CCL"</span>,<span class="st">"CAT"</span>, <span class="st">"CBOE"</span>, <span class="st">"CBRE"</span>, <span class="st">"CDW"</span>, <span class="st">"CE"</span>, <span class="st">"CNC"</span>, <span class="st">"CNP"</span>, <span class="st">"CTL"</span>, <span class="st">"CERN"</span>, <span class="st">"CF"</span>,<span class="st">"SCHW"</span>, <span class="st">"CHTR"</span>, <span class="st">"CVX"</span>, <span class="st">"CMG"</span>, <span class="st">"CB"</span>, <span class="st">"CHD"</span>, <span class="st">"CI"</span>, <span class="st">"CINF"</span>, <span class="st">"CTAS"</span>, <span class="st">"CSCO"</span>,<span class="st">"C"</span>, <span class="st">"CFG"</span>, <span class="st">"CTXS"</span>, <span class="st">"CLX"</span>, <span class="st">"CME"</span>, <span class="st">"CMS"</span>, <span class="st">"KO"</span>, <span class="st">"CTSH"</span>, <span class="st">"CL"</span>, <span class="st">"CMCSA"</span>, <span class="st">"CMA"</span>,<span class="st">"CAG"</span>, <span class="st">"CXO"</span>, <span class="st">"COP"</span>, <span class="st">"ED"</span>, <span class="st">"STZ"</span>, <span class="st">"COO"</span>, <span class="st">"CPRT"</span>, <span class="st">"GLW"</span>, <span class="st">"CTVA"</span>, <span class="st">"COST"</span>,<span class="st">"CCI"</span>, <span class="st">"CSX"</span>, <span class="st">"CMI"</span>, <span class="st">"CVS"</span>, <span class="st">"DHI"</span>, <span class="st">"DHR"</span>, <span class="st">"DRI"</span>, <span class="st">"DVA"</span>, <span class="st">"DE"</span>, <span class="st">"DAL"</span>, <span class="st">"XRAY"</span>,<span class="st">"DVN"</span>, <span class="st">"DLR"</span>, <span class="st">"D"</span>, <span class="st">"DPZ"</span>, <span class="st">"DOV"</span>, <span class="st">"DOW"</span>, <span class="st">"DTE"</span>, <span class="st">"DUK"</span>, <span class="st">"DRE"</span>, <span class="st">"DD"</span>, <span class="st">"DXC"</span>,<span class="st">"ETN"</span>, <span class="st">"EBAY"</span>, <span class="st">"ECL"</span>, <span class="st">"EIX"</span>, <span class="st">"EW"</span>, <span class="st">"EA"</span>, <span class="st">"EMN"</span>, <span class="st">"ETR"</span>, <span class="st">"EOG"</span>, <span class="st">"EQT"</span>, <span class="st">"EFX"</span>,<span class="st">"EQR"</span>, <span class="st">"ESS"</span>, <span class="st">"EL"</span>, <span class="st">"ETSY"</span>, <span class="st">"EVRG"</span>, <span class="st">"EXC"</span>, <span class="st">"EXPD"</span>, <span class="st">"EXPE"</span>, <span class="st">"FIS"</span>, <span class="st">"FISV"</span>,<span class="st">"FLT"</span>, <span class="st">"FMC"</span>, <span class="st">"F"</span>, <span class="st">"FTI"</span>, <span class="st">"FB"</span>, <span class="st">"FBHS"</span>, <span class="st">"BEN"</span>, <span class="st">"FCX"</span>, <span class="st">"FRT"</span>, <span class="st">"FTNT"</span>, <span class="st">"FTV"</span>,<span class="st">"GD"</span>, <span class="st">"GE"</span>, <span class="st">"GPC"</span>, <span class="st">"GILD"</span>, <span class="st">"GIS"</span>, <span class="st">"GM"</span>, <span class="st">"GPN"</span>, <span class="st">"GS"</span>, <span class="st">"GWW"</span>, <span class="st">"HRB"</span>, <span class="st">"HAL"</span>,<span class="st">"HBI"</span>, <span class="st">"HOG"</span>, <span class="st">"HIG"</span>, <span class="st">"HOLX"</span>, <span class="st">"HD"</span>, <span class="st">"HON"</span>, <span class="st">"HRL"</span>, <span class="st">"HST"</span>, <span class="st">"HWM"</span>, <span class="st">"HPQ"</span>, <span class="st">"HUM"</span>,<span class="st">"HBAN"</span>, <span class="st">"HII"</span>, <span class="st">"IEX"</span>, <span class="st">"IDXX"</span>, <span class="st">"INFO"</span>, <span class="st">"ITW"</span>, <span class="st">"ILMN"</span>, <span class="st">"INCY"</span>, <span class="st">"IR"</span>, <span class="st">"INTC"</span>,<span class="st">"ICE"</span>, <span class="st">"IBM"</span>, <span class="st">"IP"</span>, <span class="st">"IPG"</span>, <span class="st">"IFF"</span>, <span class="st">"INTU"</span>, <span class="st">"ISRG"</span>, <span class="st">"IVZ"</span>, <span class="st">"IRM"</span>, <span class="st">"JBHT"</span>, <span class="st">"JCI"</span>,<span class="st">"JPM"</span>, <span class="st">"JNJ"</span>, <span class="st">"J"</span>, <span class="st">"KSU"</span>, <span class="st">"K"</span>, <span class="st">"KEY"</span>, <span class="st">"KMB"</span>, <span class="st">"KIM"</span>, <span class="st">"KMI"</span>, <span class="st">"KLAC"</span>, <span class="st">"KHC"</span>, <span class="st">"KR"</span>,<span class="st">"LB"</span>, <span class="st">"LHX"</span>, <span class="st">"LH"</span>, <span class="st">"LRCX"</span>, <span class="st">"LW"</span>, <span class="st">"LVS"</span>, <span class="st">"LEG"</span>, <span class="st">"LDOS"</span>, <span class="st">"LEN"</span>, <span class="st">"LLY"</span>, <span class="st">"LNC"</span>, <span class="st">"LIN"</span>,<span class="st">"LYV"</span>, <span class="st">"L"</span>, <span class="st">"LOW"</span>, <span class="st">"LUMN"</span>, <span class="st">"LYB"</span>, <span class="st">"MTB"</span>, <span class="st">"MRO"</span>, <span class="st">"MPC"</span>, <span class="st">"MKC"</span>, <span class="st">"MCD"</span>, <span class="st">"MCK"</span>, <span class="st">"MDT"</span>,<span class="st">"MRK"</span>, <span class="st">"MET"</span>, <span class="st">"MTD"</span>, <span class="st">"MGM"</span>, <span class="st">"MCHP"</span>, <span class="st">"MU"</span>, <span class="st">"MSFT"</span>, <span class="st">"MA"</span>, <span class="st">"MHK"</span>, <span class="st">"TAP"</span>, <span class="st">"MDLZ"</span>,<span class="st">"MON"</span>, <span class="st">"MNST"</span>, <span class="st">"MCO"</span>, <span class="st">"MS"</span>, <span class="st">"MOS"</span>, <span class="st">"MSI"</span>, <span class="st">"MYL"</span>, <span class="st">"NDAQ"</span>, <span class="st">"NTAP"</span>, <span class="st">"NFLX"</span>, <span class="st">"NWL"</span>,<span class="st">"NEM"</span>, <span class="st">"NWSA"</span>, <span class="st">"NWS"</span>, <span class="st">"NEE"</span>, <span class="st">"NLSN"</span>, <span class="st">"NKE"</span>, <span class="st">"NI"</span>, <span class="st">"NSC"</span>, <span class="st">"NTRS"</span>, <span class="st">"NOC"</span>, <span class="st">"NOV"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="st">"NRG"</span>, <span class="st">"NUE"</span>, <span class="st">"NVDA"</span>, <span class="st">"NVR"</span>, <span class="st">"NXPI"</span>, <span class="st">"ORCL"</span>, <span class="st">"OXY"</span>, <span class="st">"ODFL"</span>, <span class="st">"OMC"</span>, <span class="st">"OKE"</span>, <span class="st">"ORLY"</span>,<span class="st">"OTIS"</span>, <span class="st">"O"</span>, <span class="st">"PCAR"</span>, <span class="st">"PH"</span>, <span class="st">"PDCO"</span>, <span class="st">"PAYX"</span>, <span class="st">"PAYC"</span>, <span class="st">"PNR"</span>, <span class="st">"PBCT"</span>, <span class="st">"PEAK"</span>, <span class="st">"PKI"</span>,<span class="st">"PRGO"</span>, <span class="st">"PFE"</span>, <span class="st">"PM"</span>, <span class="st">"PSX"</span>, <span class="st">"PNW"</span>, <span class="st">"PXD"</span>, <span class="st">"PNC"</span>, <span class="st">"POOL"</span>, <span class="st">"PPG"</span>, <span class="st">"PPL"</span>, <span class="st">"PFG"</span>, <span class="st">"PG"</span>,<span class="st">"PGR"</span>, <span class="st">"PLD"</span>, <span class="st">"PRU"</span>, <span class="st">"PEG"</span>, <span class="st">"PSA"</span>, <span class="st">"PHM"</span>, <span class="st">"PVH"</span>, <span class="st">"QRVO"</span>, <span class="st">"PWR"</span>, <span class="st">"QCOM"</span>, <span class="st">"RL"</span>, <span class="st">"REG"</span>,<span class="st">"REGN"</span>, <span class="st">"RF"</span>, <span class="st">"RSG"</span>, <span class="st">"RCL"</span>, <span class="st">"RMD"</span>, <span class="st">"RHI"</span>, <span class="st">"ROK"</span>, <span class="st">"ROP"</span>, <span class="st">"ROST"</span>, <span class="st">"RJF"</span>, <span class="st">"SPGI"</span>, <span class="st">"CRM"</span>,<span class="st">"SBAC"</span>, <span class="st">"SLB"</span>, <span class="st">"STX"</span>, <span class="st">"SEE"</span>, <span class="st">"SRE"</span>, <span class="st">"NOW"</span>, <span class="st">"SHW"</span>, <span class="st">"SPG"</span>, <span class="st">"SWKS"</span>, <span class="st">"SNA"</span>, <span class="st">"STT"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="st">"SRCL"</span>, <span class="st">"SWK"</span>, <span class="st">"SBUX"</span>, <span class="st">"STE"</span>, <span class="st">"SYK"</span>, <span class="st">"SIVB"</span>, <span class="st">"SLG"</span>, <span class="st">"SYY"</span>, <span class="st">"TROW"</span>, <span class="st">"TTWO"</span>, <span class="st">"TPR"</span>,<span class="st">"TGT"</span>, <span class="st">"TEL"</span>, <span class="st">"TMO"</span>, <span class="st">"TJX"</span>, <span class="st">"TSCO"</span>, <span class="st">"TDG"</span>, <span class="st">"TRV"</span>, <span class="st">"TRIP"</span>, <span class="st">"TIF"</span>, <span class="st">"TSLA"</span>, <span class="st">"TXN"</span>,<span class="st">"TXT"</span>, <span class="st">"UDR"</span>, <span class="st">"ULTA"</span>, <span class="st">"UAL"</span>, <span class="st">"UNP"</span>, <span class="st">"UNH"</span>, <span class="st">"UPS"</span>, <span class="st">"USB"</span>, <span class="st">"VLO"</span>, <span class="st">"VAR"</span>, <span class="st">"VTR"</span>,<span class="st">"VRSN"</span>, <span class="st">"VZ"</span>, <span class="st">"VRTX"</span>, <span class="st">"VIAC"</span>, <span class="st">"VFC"</span>, <span class="st">"WBA"</span>, <span class="st">"WMT"</span>, <span class="st">"WRK"</span>, <span class="st">"WU"</span>, <span class="st">"WY"</span>, <span class="st">"WHR"</span>,<span class="st">"WDC"</span>, <span class="st">"WEC"</span>, <span class="st">"WFC"</span>, <span class="st">"WELL"</span>, <span class="st">"WST"</span>, <span class="st">"XEL"</span>, <span class="st">"XOM"</span>, <span class="st">"XRAY"</span>, <span class="st">"XLNX"</span>, <span class="st">"XYL"</span>, <span class="st">"YUM"</span>,<span class="st">"ZBRA"</span>, <span class="st">"ZBH"</span>, <span class="st">"ZION"</span>, <span class="st">"ZTS"</span>,<span class="st">"GME"</span>} </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Dictionary to store ticker mentions with associated details</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>mentions <span class="op">=</span> {}</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Process submissions: combine title and selftext</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> submission <span class="kw">in</span> subreddit.hot(limit<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    combined_text <span class="op">=</span> submission.title <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> submission.selftext</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    matches <span class="op">=</span> pattern.findall(combined_text)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ticker <span class="kw">in</span> matches:</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Only record if the ticker is in our valid tickers list</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ticker <span class="kw">in</span> valid_tickers:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            record <span class="op">=</span> {</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>: datetime.utcfromtimestamp(submission.created_utc),</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                <span class="st">"text"</span>: combined_text,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                <span class="st">"type"</span>: <span class="st">"submission"</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            mentions.setdefault(ticker, []).append(record)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Process comments</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    submission.comments.replace_more(limit<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> comment <span class="kw">in</span> submission.comments.<span class="bu">list</span>():</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        matches <span class="op">=</span> pattern.findall(comment.body)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ticker <span class="kw">in</span> matches:</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> ticker <span class="kw">in</span> valid_tickers:</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                record <span class="op">=</span> {</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"date"</span>: datetime.utcfromtimestamp(comment.created_utc),</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"text"</span>: comment.body,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"type"</span>: <span class="st">"comment"</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                mentions.setdefault(ticker, []).append(record)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'mentions' dictionary into a list of records for a DataFrame</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> []</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ticker, records <span class="kw">in</span> mentions.items():</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> rec <span class="kw">in</span> records:</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        data.append({</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>            <span class="st">'ticker'</span>: ticker,</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>            <span class="st">'date'</span>: rec[<span class="st">'date'</span>],</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>            <span class="st">'text'</span>: rec[<span class="st">'text'</span>],</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>            <span class="st">'type'</span>: rec[<span class="st">'type'</span>]</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'sentiment'</span>] <span class="op">=</span> df[<span class="st">'text'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: sid.polarity_scores(x)[<span class="st">'compound'</span>])</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Here I am going to group by ticker to aggregate results</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>grouped <span class="op">=</span> df.groupby(<span class="st">'ticker'</span>).agg(</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    Total_Mentions<span class="op">=</span>(<span class="st">'ticker'</span>, <span class="st">'count'</span>),</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    Avg_Sentiment<span class="op">=</span>(<span class="st">'sentiment'</span>, <span class="st">'mean'</span>),</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    Dates<span class="op">=</span>(<span class="st">'date'</span>, <span class="kw">lambda</span> x: <span class="bu">list</span>(x)),</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    Texts<span class="op">=</span>(<span class="st">'text'</span>, <span class="kw">lambda</span> x: <span class="bu">list</span>(x))</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>).reset_index()</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Rearranging columns with Total_Mentions! </span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>grouped <span class="op">=</span> grouped[[<span class="st">'Total_Mentions'</span>, <span class="st">'ticker'</span>, <span class="st">'Avg_Sentiment'</span>, <span class="st">'Dates'</span>, <span class="st">'Texts'</span>]].sort_values(<span class="st">"Total_Mentions"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Grouped DataFrame with Sentiment:"</span>)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grouped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[nltk_data] Downloading package vader_lexicon to
+[nltk_data]     /Users/connortomchin/nltk_data...
+[nltk_data]   Package vader_lexicon is already up-to-date!
+/var/folders/k0/qyjqk_r153546dml2g39z4gh0000gn/T/ipykernel_31354/1228752870.py:47: DeprecationWarning:
+
+datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+
+/var/folders/k0/qyjqk_r153546dml2g39z4gh0000gn/T/ipykernel_31354/1228752870.py:34: DeprecationWarning:
+
+datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Grouped DataFrame with Sentiment:
+    Total_Mentions ticker  Avg_Sentiment  \
+34             199   NVDA       0.075105   
+14             119     DD       0.482706   
+41             102   TSLA       0.034760   
+1              100    AMD       0.141469   
+17              46    DTE       0.253022   
+36              23     PM      -0.338943   
+3               14    ARE      -0.108043   
+40              12    TGT      -0.208350   
+18              12     ED      -0.514192   
+22              11   GOOG       0.109236   
+4               11   AVGO       0.189755   
+33               8    NOW      -0.183650   
+23               8  GOOGL       0.512850   
+0                7    ALL      -0.617471   
+2                7   AMZN       0.448443   
+31               6   MSFT       0.060783   
+44               5    WMT       0.154520   
+11               5   COST       0.098220   
+24               4   INTC       0.404825   
+38               3    ROP       0.470100   
+7                2    BBY       0.220200   
+28               2    LLY       0.000000   
+26               2    JPM       0.824100   
+13               2    CVS       0.439550   
+9                1   CBOE       0.000000   
+35               1     PG       0.000000   
+43               1    WFC      -0.685800   
+42               1   WELL       0.427800   
+16               1    DOW       0.942100   
+5                1    AZO       0.000000   
+39               1   ROST       0.000000   
+12               1    CRM       0.000000   
+37               1    PSA       0.493900   
+6                1     BA      -0.493900   
+19               1     EL      -0.476700   
+25               1     IP       0.296000   
+8                1     BK       0.000000   
+32               1     MU      -0.680800   
+20               1    EOG      -0.340000   
+30               1     MO       0.000000   
+15               1     DE       0.000000   
+21               1    GME      -0.932700   
+27               1    KHC      -0.685800   
+10               1    CNC       0.421500   
+29               1     MA       0.567300   
+
+                                                Dates  \
+34  [2025-02-28 21:53:23, 2025-02-28 22:31:29, 202...   
+14  [2025-03-01 03:14:14, 2025-03-01 13:58:10, 202...   
+41  [2025-02-28 22:54:04, 2025-02-28 21:25:45, 202...   
+1   [2025-02-28 21:00:06, 2025-02-28 21:00:06, 202...   
+17  [2025-02-28 21:36:02, 2025-02-28 21:19:23, 202...   
+36  [2025-03-01 02:17:59, 2025-02-28 14:16:48, 202...   
+3   [2025-03-01 02:41:44, 2025-03-01 09:40:49, 202...   
+40  [2025-02-28 22:29:51, 2025-02-28 22:29:51, 202...   
+18  [2025-02-28 14:16:48, 2025-03-01 01:14:48, 202...   
+22  [2025-02-28 21:21:15, 2025-03-01 00:26:26, 202...   
+4   [2025-02-28 19:21:40, 2025-02-28 20:25:50, 202...   
+33  [2025-03-01 04:17:24, 2025-02-27 19:58:53, 202...   
+23  [2025-02-27 21:50:39, 2025-02-28 00:13:21, 202...   
+0   [2025-02-28 20:03:23, 2025-02-28 18:14:53, 202...   
+2   [2025-02-27 22:40:11, 2025-02-27 22:47:13, 202...   
+31  [2025-03-01 02:42:28, 2025-02-27 23:33:19, 202...   
+44  [2025-02-28 22:29:51, 2025-02-28 20:46:48, 202...   
+11  [2025-02-28 18:20:06, 2025-02-28 19:21:40, 202...   
+24  [2025-02-28 08:06:36, 2025-02-28 08:06:36, 202...   
+38  [2025-02-27 15:18:03, 2025-02-27 15:18:03, 202...   
+7          [2025-02-28 20:46:48, 2025-03-01 13:23:04]   
+28         [2025-02-28 21:52:58, 2025-02-28 22:46:58]   
+26         [2025-02-27 23:41:14, 2025-02-27 20:17:22]   
+13         [2025-03-01 08:10:28, 2025-02-28 12:12:54]   
+9                               [2025-02-27 13:42:20]   
+35                              [2025-02-28 23:14:36]   
+43                              [2025-03-01 02:26:09]   
+42                              [2025-02-27 09:57:40]   
+16                              [2025-03-01 09:11:33]   
+5                               [2025-03-01 13:23:04]   
+39                              [2025-03-01 13:23:04]   
+12                              [2025-02-27 09:21:59]   
+37                              [2025-02-27 14:48:05]   
+6                               [2025-02-27 06:42:27]   
+19                              [2025-02-27 17:02:21]   
+25                              [2025-02-27 02:13:34]   
+8                               [2025-03-01 02:28:27]   
+32                              [2025-02-27 21:50:39]   
+20                              [2025-02-27 20:30:45]   
+30                              [2025-03-01 01:59:06]   
+15                              [2025-03-01 09:18:41]   
+21                              [2025-02-27 10:26:06]   
+27                              [2025-03-01 02:26:09]   
+10                              [2025-02-27 13:16:39]   
+29                              [2025-02-28 01:20:11]   
+
+                                                Texts  
+34  [Dumbass NVDA bears, Bought SPY 590c at 0.10, ...  
+14  [$GENI calls \n\nCheck the DD if you wanna kno...  
+41  [Imagine if all the TSLA fanboys suddenly got ...  
+1   [When SPY is down -1.5%\n\nAMD down -10%\n\nWh...  
+17  [SPX 0 DTE 5900C traded as low as 1.05 this af...  
+36  [**Ban Bet Created:** **/u/imlockedoutagain** ...  
+3   [Dude.. you ARE day trading. 1-2 trades per da...  
+40  [$TGT gonna take a big fat donkey dick to thei...  
+18  [I will be messaging you in 1 year on [**2026-...  
+22  [Even GOOG went green today lol what&nbsp;, $GOOG $...  
+4   [Time to lose money on AVGO (as if I haven’t l...  
+33  [YOU DONT HAVE THE CARDS RIGHT NOW ![img](emot...  
+23  [I was upset since my near the money leapsAMZN...  
+0   [First, goes to show just how bullshit everyth...  
+2   [NVDA's slide today marks the second largest o...  
+31  [This is what MSFT is doing, MSFT welcomes the...  
+44  [$TGT gonna take a big fat donkey dick to thei...  
+11  [In COST we trust, Time to lose money on AVGO ...  
+24  [I always thought it was hilarious that people...  
+38  [No news about missing ROPs in expensive GPUs ...  
+7   [Puts on BBY? I get Black Friday and holiday s...  
+28  [Today Review ..thanks to option king \nLLY 91...  
+26  [With help from AI\nJim Cramer, the host of CN...  
+13  [It was a few months ago, she said it not me. ...  
+9            [I’ll give it back to CBOE, not to you.]  
+35  [[r/nottheonion](https://www.reddit.com/r/nott...  
+43  [&gt;Buffett…notable exception\n\nDon’t fall for ...  
+42  [I used mine to buy a guitar from a weed deale...  
+16  [ The stock regulars will tell you yes but I d...  
+5   [    $GAP   11.9%\n    $ZS    11.2%\n    $KIDS...  
+39  [    $GAP   11.9%\n    $ZS    11.2%\n    $KIDS...  
+12  [We are still at the beginning of this. Curren...  
+37  [PSA: TSLA went from 250 to 480 purely on spec...  
+6   [If it doesn’t go up on good news, the top is ...  
+19  [IT COULD BE WORSE. YOU COULD BE MICHAEL SAYLO...  
+25  [Yeah, its everyones personal data and IPs and...  
+8   [They went BK in 2008 and then re listed and w...  
+32  [I was upset since my near the money leapsAMZN...  
+20  [What swings? Every small-capper today peaks o...  
+30                               [Mstr 400 monday MO]  
+15                                   [GOBLIN MOOOODE]  
+21  [And 90% into WHAT ![img](emote|t5_2th52|4271)...  
+27  [&gt;Buffett…notable exception\n\nDon’t fall for ...  
+10               [I am prefer buying CNC and MOH lol]  
+29  [We are like 2% off of spy's 200D MA. We are h...  </code></pre>
+</div>
+</div>
+<div id="9d35d2f4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># I was having trouble with the display of the text column, so I set a higher width on the columns</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>nvda_comments <span class="op">=</span> df[df[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'NVDA'</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nvda_comments[[<span class="st">'date'</span>, <span class="st">'text'</span>, <span class="st">'sentiment'</span>]].head(<span class="dv">30</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   date  \
+202 2025-02-28 21:53:23   
+203 2025-02-28 22:31:29   
+204 2025-03-01 06:19:35   
+205 2025-02-28 21:11:57   
+206 2025-02-28 21:16:00   
+207 2025-02-28 23:38:06   
+208 2025-02-28 21:33:35   
+209 2025-02-28 21:09:31   
+210 2025-02-28 22:08:17   
+211 2025-02-28 22:54:33   
+212 2025-02-28 23:41:35   
+213 2025-03-01 01:21:13   
+214 2025-03-01 11:30:32   
+215 2025-03-01 03:42:24   
+216 2025-02-28 20:24:03   
+217 2025-02-28 02:59:26   
+218 2025-02-28 02:59:26   
+219 2025-02-28 12:44:07   
+220 2025-02-28 23:32:45   
+221 2025-02-28 23:32:45   
+222 2025-02-28 23:32:45   
+223 2025-02-28 23:32:45   
+224 2025-02-28 23:32:45   
+225 2025-02-28 23:32:45   
+226 2025-02-28 23:32:45   
+227 2025-02-28 23:32:45   
+228 2025-03-01 00:09:54   
+229 2025-02-28 23:33:12   
+230 2025-03-01 07:38:56   
+231 2025-02-28 17:44:34   
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              text  \
+202                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Dumbass NVDA bears   
+203                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Bought SPY 590c at 0.10, sold at 4.05. It actually went up to 4.85 for a moment. Pure gamble from NVDA puts profits   
+204                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                A moment of silence for my fallen brethren that thought NVDA would rocket past $140 on earnings   
+205                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Was up with NVDA call 30% but held it for Monday to avoid PDT ! Fingers crossed !   
+206                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Didn’t love NVDA below 120? Don’t worry you’ll love it when it’s 135+ again ![img](emote|t5_2th52|4271)   
+207                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 NVDA be like:\n\nGreat earnings: 🫠\n\nGeopolitical conflict: 🎉   
+208                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  #Ban Bet Lost\n\n/u/SargathusWA made a bet that NVDA would go to 140.0 within **1 week** when it was 134.245 and it did not, so they were banned for a week.\n\nTheir record is now 1 wins and 1 losses\n\n[**Join WSB Discord**](http://discord.gg/wsbverse)   
+209                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #Ban Bet Won\n---\n\n/u/Conscious-Relief-195 made a bet that NVDA would go to 125.0 within **1 week** when it was 118.32 and it did, congrats you fuckin nerd.\n\nTheir record is now 2 wins and 0 losses\n\n[**Join WSB Discord**](http://discord.gg/wsbverse)   
+210                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Wow NVDA carries spy   
+211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              I’m mad at myself. Most of the drop in my port was due to overall conditions, and unrealized. But I also made several bad trades on NVDA, MSTR and XYZ all running and failing in the same week and lost an actual $15k. Definitely learned my lesson (also, moot point bc have no buying power.)   
+212                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Who remembers Aaron from NVDAs earnings call? ![img](emote|t5_2th52|4271)   
+213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Man, It’s such a relief not holding anything over the weekend. Especially after NVDA completely gaped my ass last week.   
+214                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Burnt by NVDA earnings?   
+215                                                                                                                                                                                                                                                                                                Calls on corporations and puts on everything else. No one is paid, no one buys anything. No revenue, no expenses, money devalues into meaningless as the fallout wars begin, but stocks pump anyway bc the AI CEOs all regurgitate "AI AI AI AI" followed by the complete text of Mein Kampf every earnings call.\n\nTesla cars never achieve full autonomy, but automated locks do prevent anyone from entering (or leaving) the vehicle. People either die of starvation, or are brutally massacred by Palantir-enabled Predator drones mistaking them for ISIS agents. There are no cool wasteland gangs, just Cybertruck technicals berserking around crashing into shit over and over.\n\nEventually everyone is wiped out, rising oceans swallow all continents, and halobacteria once again rule the Earth. NVDA market cap still reaches $10T, somehow.   
+216                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Soon the price of a carton of eggs might unironically be worth more than the price of a NVDA share.&nbsp;   
+217                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.   
+218                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.   
+219                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                AMD is not cheap, keep adding your undervalued NVDA shares and the sky is green   
+220  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+221  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+222  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+223  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+224  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+225  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+226  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+227  NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.\n\nClosed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.\n\nYesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k \n\nToday used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.   
+228                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Call it by its name - Risk reversal&nbsp;strategy.  \nI too have small NVDA risk reversal positions, 3/14 expiration. I don't like locking up collateral cash for longer than 2 weeks. A lot can happen in 80 days.   
+229                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    You're not as clever as you think, poor boy. NVDA's been range-bound, but you're betting on a bounce with earnings volatility. Remember, even with a 140 target, gamma risk is real. Your calls could evaporate if the stock tanks further. And with the market's reaction to earnings, you might be holding the bag at $11   
+230                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        There is no loss between 110-125 (actually a small gain of $1400 per month in interest from money market) whereas buying $417k of NVDA stocks would generate $36k loss if price drops to $110. I think a lot of stocks are undervalued that doesn’t mean I’m willing to dump $400k into them at the current price. Of course if I am 100% sure it’s going up I would have just bought all calls at open today when it was at $117, but I don’t have a 🔮 or my name would be in the news instead of wsb.   
+231                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Nobody puts NVDA in the same corner as AMD.   
+
+     sentiment  
+202    -0.5574  
+203     0.4404  
+204    -0.3612  
+205    -0.5242  
+206     0.7777  
+207     0.6486  
+208    -0.5520  
+209     0.7845  
+210     0.5859  
+211    -0.9347  
+212     0.0000  
+213    -0.1689  
+214     0.0000  
+215    -0.9787  
+216     0.4767  
+217    -0.4301  
+218    -0.4301  
+219     0.2960  
+220     0.7783  
+221     0.7783  
+222     0.7783  
+223     0.7783  
+224     0.7783  
+225     0.7783  
+226     0.7783  
+227     0.7783  
+228    -0.6497  
+229    -0.6641  
+230     0.0387  
+231     0.0000  </code></pre>
+</div>
+</div>
+<div id="79235131" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nvda_grouped_texts <span class="op">=</span> grouped[grouped[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'NVDA'</span>][<span class="st">'Texts'</span>].values</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> nvda_grouped_texts.size <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, text <span class="kw">in</span> <span class="bu">enumerate</span>(nvda_grouped_texts[<span class="dv">0</span>][:<span class="dv">30</span>], start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Comment </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(text)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Ticker NVDA not found in grouped data."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Comment 1:
+Dumbass NVDA bears
+--------------------------------------------------------------------------------
+Comment 2:
+Bought SPY 590c at 0.10, sold at 4.05. It actually went up to 4.85 for a moment. Pure gamble from NVDA puts profits
+--------------------------------------------------------------------------------
+Comment 3:
+A moment of silence for my fallen brethren that thought NVDA would rocket past $140 on earnings
+--------------------------------------------------------------------------------
+Comment 4:
+Was up with NVDA call 30% but held it for Monday to avoid PDT ! Fingers crossed !
+--------------------------------------------------------------------------------
+Comment 5:
+Didn’t love NVDA below 120? Don’t worry you’ll love it when it’s 135+ again ![img](emote|t5_2th52|4271)
+--------------------------------------------------------------------------------
+Comment 6:
+NVDA be like:
+
+Great earnings: 🫠
+
+Geopolitical conflict: 🎉
+--------------------------------------------------------------------------------
+Comment 7:
+#Ban Bet Lost
+
+/u/SargathusWA made a bet that NVDA would go to 140.0 within **1 week** when it was 134.245 and it did not, so they were banned for a week.
+
+Their record is now 1 wins and 1 losses
+
+[**Join WSB Discord**](http://discord.gg/wsbverse)
+--------------------------------------------------------------------------------
+Comment 8:
+#Ban Bet Won
+---
+
+/u/Conscious-Relief-195 made a bet that NVDA would go to 125.0 within **1 week** when it was 118.32 and it did, congrats you fuckin nerd.
+
+Their record is now 2 wins and 0 losses
+
+[**Join WSB Discord**](http://discord.gg/wsbverse)
+--------------------------------------------------------------------------------
+Comment 9:
+Wow NVDA carries spy
+--------------------------------------------------------------------------------
+Comment 10:
+I’m mad at myself. Most of the drop in my port was due to overall conditions, and unrealized. But I also made several bad trades on NVDA, MSTR and XYZ all running and failing in the same week and lost an actual $15k. Definitely learned my lesson (also, moot point bc have no buying power.)
+--------------------------------------------------------------------------------
+Comment 11:
+Who remembers Aaron from NVDAs earnings call? ![img](emote|t5_2th52|4271)
+--------------------------------------------------------------------------------
+Comment 12:
+Man, It’s such a relief not holding anything over the weekend. Especially after NVDA completely gaped my ass last week.
+--------------------------------------------------------------------------------
+Comment 13:
+Burnt by NVDA earnings?
+--------------------------------------------------------------------------------
+Comment 14:
+Calls on corporations and puts on everything else. No one is paid, no one buys anything. No revenue, no expenses, money devalues into meaningless as the fallout wars begin, but stocks pump anyway bc the AI CEOs all regurgitate "AI AI AI AI" followed by the complete text of Mein Kampf every earnings call.
+
+Tesla cars never achieve full autonomy, but automated locks do prevent anyone from entering (or leaving) the vehicle. People either die of starvation, or are brutally massacred by Palantir-enabled Predator drones mistaking them for ISIS agents. There are no cool wasteland gangs, just Cybertruck technicals berserking around crashing into shit over and over.
+
+Eventually everyone is wiped out, rising oceans swallow all continents, and halobacteria once again rule the Earth. NVDA market cap still reaches $10T, somehow.
+--------------------------------------------------------------------------------
+Comment 15:
+Soon the price of a carton of eggs might unironically be worth more than the price of a NVDA share.&nbsp;
+--------------------------------------------------------------------------------
+Comment 16:
+Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.
+--------------------------------------------------------------------------------
+Comment 17:
+Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.
+--------------------------------------------------------------------------------
+Comment 18:
+AMD is not cheap, keep adding your undervalued NVDA shares and the sky is green
+--------------------------------------------------------------------------------
+Comment 19:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 20:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 21:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 22:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 23:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 24:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 25:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 26:
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Comment 27:
+Call it by its name - Risk reversal&nbsp;strategy.  
+I too have small NVDA risk reversal positions, 3/14 expiration. I don't like locking up collateral cash for longer than 2 weeks. A lot can happen in 80 days.
+--------------------------------------------------------------------------------
+Comment 28:
+You're not as clever as you think, poor boy. NVDA's been range-bound, but you're betting on a bounce with earnings volatility. Remember, even with a 140 target, gamma risk is real. Your calls could evaporate if the stock tanks further. And with the market's reaction to earnings, you might be holding the bag at $11
+--------------------------------------------------------------------------------
+Comment 29:
+There is no loss between 110-125 (actually a small gain of $1400 per month in interest from money market) whereas buying $417k of NVDA stocks would generate $36k loss if price drops to $110. I think a lot of stocks are undervalued that doesn’t mean I’m willing to dump $400k into them at the current price. Of course if I am 100% sure it’s going up I would have just bought all calls at open today when it was at $117, but I don’t have a 🔮 or my name would be in the news instead of wsb.
+--------------------------------------------------------------------------------
+Comment 30:
+Nobody puts NVDA in the same corner as AMD.
+--------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="70ab594d" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>NVDA_texts <span class="op">=</span> grouped[grouped[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'NVDA'</span>][<span class="st">'Texts'</span>].values</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(NVDA_texts) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    texts <span class="op">=</span> NVDA_texts[<span class="dv">0</span>]  <span class="co"># list of texts for NVDA</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print only the first 15 comments (if available)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> text <span class="kw">in</span> texts[:<span class="dv">30</span>]:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(text)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Ticker NVDA not found in the grouped data."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dumbass NVDA bears
+--------------------------------------------------------------------------------
+Bought SPY 590c at 0.10, sold at 4.05. It actually went up to 4.85 for a moment. Pure gamble from NVDA puts profits
+--------------------------------------------------------------------------------
+A moment of silence for my fallen brethren that thought NVDA would rocket past $140 on earnings
+--------------------------------------------------------------------------------
+Was up with NVDA call 30% but held it for Monday to avoid PDT ! Fingers crossed !
+--------------------------------------------------------------------------------
+Didn’t love NVDA below 120? Don’t worry you’ll love it when it’s 135+ again ![img](emote|t5_2th52|4271)
+--------------------------------------------------------------------------------
+NVDA be like:
+
+Great earnings: 🫠
+
+Geopolitical conflict: 🎉
+--------------------------------------------------------------------------------
+#Ban Bet Lost
+
+/u/SargathusWA made a bet that NVDA would go to 140.0 within **1 week** when it was 134.245 and it did not, so they were banned for a week.
+
+Their record is now 1 wins and 1 losses
+
+[**Join WSB Discord**](http://discord.gg/wsbverse)
+--------------------------------------------------------------------------------
+#Ban Bet Won
+---
+
+/u/Conscious-Relief-195 made a bet that NVDA would go to 125.0 within **1 week** when it was 118.32 and it did, congrats you fuckin nerd.
+
+Their record is now 2 wins and 0 losses
+
+[**Join WSB Discord**](http://discord.gg/wsbverse)
+--------------------------------------------------------------------------------
+Wow NVDA carries spy
+--------------------------------------------------------------------------------
+I’m mad at myself. Most of the drop in my port was due to overall conditions, and unrealized. But I also made several bad trades on NVDA, MSTR and XYZ all running and failing in the same week and lost an actual $15k. Definitely learned my lesson (also, moot point bc have no buying power.)
+--------------------------------------------------------------------------------
+Who remembers Aaron from NVDAs earnings call? ![img](emote|t5_2th52|4271)
+--------------------------------------------------------------------------------
+Man, It’s such a relief not holding anything over the weekend. Especially after NVDA completely gaped my ass last week.
+--------------------------------------------------------------------------------
+Burnt by NVDA earnings?
+--------------------------------------------------------------------------------
+Calls on corporations and puts on everything else. No one is paid, no one buys anything. No revenue, no expenses, money devalues into meaningless as the fallout wars begin, but stocks pump anyway bc the AI CEOs all regurgitate "AI AI AI AI" followed by the complete text of Mein Kampf every earnings call.
+
+Tesla cars never achieve full autonomy, but automated locks do prevent anyone from entering (or leaving) the vehicle. People either die of starvation, or are brutally massacred by Palantir-enabled Predator drones mistaking them for ISIS agents. There are no cool wasteland gangs, just Cybertruck technicals berserking around crashing into shit over and over.
+
+Eventually everyone is wiped out, rising oceans swallow all continents, and halobacteria once again rule the Earth. NVDA market cap still reaches $10T, somehow.
+--------------------------------------------------------------------------------
+Soon the price of a carton of eggs might unironically be worth more than the price of a NVDA share.&nbsp;
+--------------------------------------------------------------------------------
+Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.
+--------------------------------------------------------------------------------
+Not overweight AMD yet but down 15% currently and buying more at $95. This is their chance to grab market share from Nvda in gaming with a questionable 50 series launch. AMD can flop if their product pricing continues to be NVDA - $50 ... Radeon needs to go on the offence instead of eating up NVDA's scraps.
+--------------------------------------------------------------------------------
+AMD is not cheap, keep adding your undervalued NVDA shares and the sky is green
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+NVDA $125 calls and $110 cash secured puts - $25k premium used to purchase 25 80DTE calls *”Margin” means the accounts are margin accounts, it doesn’t mean I’m borrowing money, or I would need to borrow money in case I’m assigned.
+
+Closed my earlier position of -39 50DTE NVDA 120 cash secured puts for a small profit of $2.1k 2 days ago (date of earnings) at open. In hindsight, I should have waited until yesterday at open to close for a bigger profit but I just didn’t feel 100% comfortable with how the market would react to earnings.
+
+Yesterday wrote 40 80DTE NVDA 110 cash secured puts for $25k premium. Maximum loss if NVDA goes to 0 is $414.7k 
+
+Today used the premiums (and an extra $2k) to buy 25 80DTE 125 calls (should have done this yesterday at close). NVDA has been 120-150 range bound for several months. I believe yesterday’s 8% drop is an overreaction and NVDA will be in the 140 range in March. If im wrong, the calls were 90% paid by the premiums. Worst case scenario, this is basically a limit order for 4,000 shares of NVDA at $110.5 a share, and I’m happy to hold onto NVDA at that price.
+--------------------------------------------------------------------------------
+Call it by its name - Risk reversal&nbsp;strategy.  
+I too have small NVDA risk reversal positions, 3/14 expiration. I don't like locking up collateral cash for longer than 2 weeks. A lot can happen in 80 days.
+--------------------------------------------------------------------------------
+You're not as clever as you think, poor boy. NVDA's been range-bound, but you're betting on a bounce with earnings volatility. Remember, even with a 140 target, gamma risk is real. Your calls could evaporate if the stock tanks further. And with the market's reaction to earnings, you might be holding the bag at $11
+--------------------------------------------------------------------------------
+There is no loss between 110-125 (actually a small gain of $1400 per month in interest from money market) whereas buying $417k of NVDA stocks would generate $36k loss if price drops to $110. I think a lot of stocks are undervalued that doesn’t mean I’m willing to dump $400k into them at the current price. Of course if I am 100% sure it’s going up I would have just bought all calls at open today when it was at $117, but I don’t have a 🔮 or my name would be in the news instead of wsb.
+--------------------------------------------------------------------------------
+Nobody puts NVDA in the same corner as AMD.
+--------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="62341dd8" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set max column width to None to avoid truncation</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_colwidth'</span>, <span class="va">None</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>MSFT_comments <span class="op">=</span> df[df[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'MSFT'</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(MSFT_comments[[<span class="st">'date'</span>, <span class="st">'text'</span>, <span class="st">'sentiment'</span>]].head(<span class="dv">30</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   date  \
+648 2025-03-01 02:42:28   
+649 2025-02-27 23:33:19   
+650 2025-02-28 03:00:46   
+651 2025-02-26 22:56:35   
+652 2025-02-27 00:22:02   
+653 2025-02-26 16:14:30   
+
+                                                                                                                                          text  \
+648                                                                                                                 This is what MSFT is doing   
+649                                                                                                                         MSFT welcomes them   
+650                                                                      I've sat on 50% cash 50% MSFT since november. I enjoy this immensely.   
+651                                         AI trade is slowly fading away. First domino to fall is MSFT cutting back on data center spending.   
+652  What about META's new $200 billion data center announcement today?? The MSFT news means like 6-7 billion (to just be spent later anyway).   
+653             no dumbass that was fake news FUD. MSFT confirmed they STRONGLY refute any rumours that they are scaling back investment in AI   
+
+     sentiment  
+648     0.0000  
+649     0.4019  
+650     0.4939  
+651    -0.1280  
+652     0.4329  
+653    -0.8360  </code></pre>
+</div>
+</div>
+<div id="a2193731" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>MSFT_grouped_texts <span class="op">=</span> grouped[grouped[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'MSFT'</span>][<span class="st">'Texts'</span>].values</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> MSFT_grouped_texts.size <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, text <span class="kw">in</span> <span class="bu">enumerate</span>(MSFT_grouped_texts[<span class="dv">0</span>][:<span class="dv">30</span>], start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Comment </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(text)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Ticker GME not found in grouped data."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Comment 1:
+This is what MSFT is doing
+--------------------------------------------------------------------------------
+Comment 2:
+MSFT welcomes them
+--------------------------------------------------------------------------------
+Comment 3:
+I've sat on 50% cash 50% MSFT since november. I enjoy this immensely.
+--------------------------------------------------------------------------------
+Comment 4:
+AI trade is slowly fading away. First domino to fall is MSFT cutting back on data center spending.
+--------------------------------------------------------------------------------
+Comment 5:
+What about META's new $200 billion data center announcement today?? The MSFT news means like 6-7 billion (to just be spent later anyway).
+--------------------------------------------------------------------------------
+Comment 6:
+no dumbass that was fake news FUD. MSFT confirmed they STRONGLY refute any rumours that they are scaling back investment in AI
+--------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="efbee502" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>highest_sentiment_ticker <span class="op">=</span> grouped.loc[grouped[<span class="st">'Avg_Sentiment'</span>].idxmax(), <span class="st">'ticker'</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ticker with highest sentiment:"</span>, highest_sentiment_ticker)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ticker with highest sentiment: DOW</code></pre>
+</div>
+</div>
+<div id="752af63a" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>msft_df <span class="op">=</span> df[df[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'MSFT'</span>].copy()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Createing a new column here to store only the date part </span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>msft_df[<span class="st">'date_only'</span>] <span class="op">=</span> msft_df[<span class="st">'date'</span>].dt.date</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Group by the date_only column and count the mentions for each day</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>mentions_by_date <span class="op">=</span> msft_df.groupby(<span class="st">'date_only'</span>).size().reset_index(name<span class="op">=</span><span class="st">'mentions'</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the frequency of mentions over time</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>plt.plot(mentions_by_date[<span class="st">'date_only'</span>], mentions_by_date[<span class="st">'mentions'</span>], marker<span class="op">=</span><span class="st">'o'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'MSFT Mentions Over Time on r/wallstreetbets'</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Mentions'</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="UnstructuredFinalProject_files/figure-html/cell-9-output-1.png" width="1142" height="566" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
